@@ -32,7 +32,7 @@ export function signHS256(
   return `${data}.${encodedSig}`;
 }
 
-export function verifyHS256(token: string, secret: string): Record<string, unknown> {
+export function verifyHS256<T = Record<string, unknown>>(token: string, secret: string): T {
   const parts = token.split('.');
   if (parts.length !== 3) throw new Error('Malformed JWT');
 
@@ -55,5 +55,5 @@ export function verifyHS256(token: string, secret: string): Record<string, unkno
 
   if (payload.exp && now > payload.exp) throw new Error('Token expired');
 
-  return payload;
+  return payload as T;
 }
