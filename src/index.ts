@@ -17,7 +17,10 @@ app.get('/public', (req, res) => {
 });
 
 app.get('/protected', authMiddleware, (req: AuthRequest, res) => {
-  res.json({ message: 'You accessed protected route!', user: req.user });
+  res.json({
+    message: 'You accessed protected route!',
+    email: req.user?.email,
+  });
 });
 
 app.listen(port, () => {

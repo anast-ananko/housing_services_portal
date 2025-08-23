@@ -82,11 +82,36 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 ```json
 {
-  "token": "JWT_TOKEN_HERE"
+  "accessToken": "ACCESS_JWT_TOKEN_HERE",
+  "refreshToken": "REFRESH_JWT_TOKEN_HERE"
 }
 ```
 
 - `401 Unauthorized` if credentials are invalid
+
+### Refresh Access Token
+
+**Endpoint:** `POST /api/auth/refresh`
+
+**Request Body:**
+
+```json
+{
+  "refreshToken": "REFRESH_JWT_TOKEN_HERE"
+}
+```
+
+**Response:**
+
+- `200 OK` on success
+
+```json
+{
+  "accessToken": "NEW_ACCESS_JWT_TOKEN_HERE"
+}
+```
+
+- `401 Unauthorized` if refresh token is invalid or expired
 
 ---
 

@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { v4 as uuid } from 'uuid';
 
 const base64url = {
   encode: (input: Buffer | string): string =>
@@ -19,6 +20,7 @@ export function signHS256(
   const fullPayload = {
     iat: now,
     ...(options.expiresInSeconds ? { exp: now + options.expiresInSeconds } : {}),
+    jti: uuid(),
     ...payload,
   };
 

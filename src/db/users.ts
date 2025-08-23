@@ -12,3 +12,18 @@ export function createUser(email: string, password: string): void {
 export function getUserByEmail(email: string): User | undefined {
   return users.get(email);
 }
+
+export function saveRefreshToken(email: string, token: string): void {
+  const user = users.get(email);
+  if (user) {
+    user.refreshToken = token;
+  }
+}
+
+export function getUserByRefreshToken(refreshToken: string): User | undefined {
+  for (const user of users.values()) {
+    if (user.refreshToken === refreshToken) {
+      return user;
+    }
+  }
+}
