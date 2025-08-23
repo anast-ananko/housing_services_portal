@@ -1,0 +1,68 @@
+Table Residents {
+  id int [pk, increment]
+  name varchar
+  email varchar [unique]
+  phone varchar
+  address text
+  created_at datetime
+}
+
+Table Services {
+  id int [pk, increment]
+  name varchar
+  description text
+  cost decimal
+  is_active boolean
+}
+
+Table Requests {
+  id int [pk, increment]
+  resident_id int [ref: > Residents.id]
+  service_id int [ref: > Services.id]
+  manager_id int [ref: > Managers.id]
+  status request_status
+  created_at datetime
+  updated_at datetime
+}
+
+Table Payments {
+  id int [pk, increment]
+  request_id int [ref: > Requests.id]
+  amount decimal
+  method payment_method 
+  status payment_status
+  paid_at datetime
+}
+
+Table Managers {
+  id int [pk, increment]
+  name varchar
+  email varchar [unique]
+  phone varchar
+  role manager_role 
+}
+
+enum request_status {
+  pending
+  in_progress
+  completed
+  cancelled
+}
+
+enum payment_method {
+  card
+  cash
+  online
+}
+
+enum payment_status {
+  paid
+  pending
+  failed
+}
+
+enum manager_role {
+  admin
+  technician
+  support
+}
