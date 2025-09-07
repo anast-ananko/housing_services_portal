@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import { authMiddleware } from './middleware/authMiddleware';
 import { AuthRequest } from './types/express';
+import { initDatabase } from './db/setup';
 
 dotenv.config();
 
@@ -23,6 +24,15 @@ app.get('/protected', authMiddleware, (req: AuthRequest, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+(async () => {
+  try {
+    await initDatabase(); 
+
+    app.listen(port, () => {
+      console.log(`Server running on http://localhost:${port}`);
+    });
+  } catch (err) {
+    console.error('Failed to initialize database:', err);
+    process.exit(1); 
+  }
+})();

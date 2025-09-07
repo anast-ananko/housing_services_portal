@@ -125,57 +125,69 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 ### `Residents` Table
 
-| Column     | Type     | Constraints        | Description                       |
-| ---------- | -------- | ------------------ | --------------------------------- |
-| id         | int      | PK, auto-increment | Unique identifier of the resident |
-| name       | varchar  |                    | Full name of the resident         |
-| email      | varchar  | Unique             | Resident's email address          |
-| phone      | varchar  |                    | Resident's phone number           |
-| address    | text     |                    | Resident's home address           |
-| created_at | datetime |                    | Timestamp of record creation      |
+| Column     | Type     | Constraints             | Description                       |
+| ---------- | -------- | ----------------------- | --------------------------------- |
+| id         | int      | PK, auto-increment      | Unique identifier of the resident |
+| name       | varchar  | NOT NULL                | Full name of the resident         |
+| email      | varchar  | UNIQUE, NOT NULL        | Resident's email address          |
+| phone      | varchar  |                         | Resident's phone number           |
+| address    | text     |                         | Resident's home address           |
+| created_at | datetime | NOT NULL, DEFAULT now() | Timestamp of record creation      |
 
 ### `Services` Table
 
-| Column      | Type    | Constraints        | Description                      |
-| ----------- | ------- | ------------------ | -------------------------------- |
-| id          | int     | PK, auto-increment | Unique identifier of the service |
-| name        | varchar |                    | Name of the service              |
-| description | text    |                    | Description of the service       |
-| cost        | decimal |                    | Service cost                     |
-| is_active   | boolean |                    | Whether the service is active    |
+| Column      | Type    | Constraints                 | Description                      |
+| ----------- | ------- | --------------------------- | -------------------------------- |
+| id          | int     | PK, auto-increment          | Unique identifier of the service |
+| name        | varchar | NOT NULL                    | Name of the service              |
+| description | text    |                             | Description of the service       |
+| cost        | decimal | NOT NULL, CHECK (cost >= 0) | Service cost                     |
+| is_active   | boolean | DEFAULT TRUE                | Whether the service is active    |
 
 ### `Requests` Table
 
-| Column      | Type     | Constraints        | Description                       |
-| ----------- | -------- | ------------------ | --------------------------------- |
-| id          | int      | PK, auto-increment | Unique identifier of the request  |
-| resident_id | int      | FK → Residents.id  | The resident who made the request |
-| service_id  | int      | FK → Services.id   | Service being requested           |
-| manager_id  | int      | FK → Managers.id   | Manager assigned to the request   |
-| status      | enum     | request_status     | Status of the request             |
-| created_at  | datetime |                    | Timestamp of request creation     |
-| updated_at  | datetime |                    | Timestamp of last update          |
+| Column      | Type     | Constraints                         | Description                       |
+| ----------- | -------- | ----------------------------------- | --------------------------------- |
+| id          | int      | PK, auto-increment                  | Unique identifier of the request  |
+| resident_id | int      | NOT NULL, FK → Residents.id         | The resident who made the request |
+| service_id  | int      | NOT NULL, FK → Services.id          | Service being requested           |
+| manager_id  | int      | FK → Managers.id                    | Manager assigned to the request   |
+| status      | enum     | DEFAULT 'pending', request_status   | Status of the request             |
+| created_at  | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Timestamp of request creation     |
+| updated_at  | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Timestamp of last update          |
 
 ### `Payments` Table
 
-| Column     | Type     | Constraints        | Description                       |
-| ---------- | -------- | ------------------ | --------------------------------- |
-| id         | int      | PK, auto-increment | Unique payment identifier         |
-| request_id | int      | FK → Requests.id   | Associated request                |
-| amount     | decimal  |                    | Payment amount                    |
-| method     | enum     | payment_method     | Payment method (card/cash/online) |
-| status     | enum     | payment_status     | Payment status                    |
-| paid_at    | datetime |                    | Timestamp of payment              |
+| Column     | Type     | Constraints                       | Description                       |
+| ---------- | -------- | --------------------------------- | --------------------------------- |
+| id         | int      | PK, auto-increment                | Unique payment identifier         |
+| request_id | int      | NOT NULL, FK → Requests.id        | Associated request                |
+| amount     | decimal  | NOT NULL, CHECK (amount >= 0)     | Payment amount                    |
+| method     | enum     | NOT NULL, payment_method          | Payment method (card/cash/online) |
+| status     | enum     | DEFAULT 'pending', payment_status | Payment status                    |
+| paid_at    | datetime |                                   | Timestamp of payment              |
 
 ### `Managers` Table
 
-| Column | Type    | Constraints        | Description                                    |
-| ------ | ------- | ------------------ | ---------------------------------------------- |
-| id     | int     | PK, auto-increment | Unique identifier of the manager               |
-| name   | varchar |                    | Manager's full name                            |
-| email  | varchar | Unique             | Manager's email address                        |
-| phone  | varchar |                    | Manager's phone number                         |
-| role   | enum    | manager_role       | Role of the manager (admin/technician/support) |
+| Column | Type    | Constraints            | Description                                    |
+| ------ | ------- | ---------------------- | ---------------------------------------------- |
+| id     | int     | PK, auto-increment     | Unique identifier of the manager               |
+| name   | varchar | NOT NULL               | Manager's full name                            |
+| email  | varchar | UNIQUE, NOT NULL       | Manager's email address                        |
+| phone  | varchar |                        | Manager's phone number                         |
+| role   | enum    | NOT NULL, manager_role | Role of the manager (admin/technician/support) |
+
+### `Users` Table
+
+| Column        | Type    | Constraints                  | Description                                 |
+| ------------- | ------- | ---------------------------- | ------------------------------------------- |
+| id            | int     | PK, auto-increment           | Unique identifier of the user               |
+| email         | varchar | UNIQUE, NOT NULL             | User's email address                        |
+| password_hash | varchar | NOT NULL                     | Hashed password                             |
+| refresh_token | text    |                              | Refresh token for authentication            |
+| role          | varchar | NOT NULL, DEFAULT 'resident' | User role (e.g., resident, manager, admin)  |
+| resident_id   | int     | FK → Residents.id            | Linked resident record (if role = resident) |
+| manager_id    | int     | FK → Managers.id             | Linked manager record (if role = manager)   |
 
 ### Enums
 

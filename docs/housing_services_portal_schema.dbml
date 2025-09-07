@@ -1,11 +1,82 @@
 Table Residents {
   id int [pk, increment]
-  name varchar
-  email varchar [unique]
+  name varchar [not null]
+  email varchar [unique, not null]
   phone varchar
   address text
-  created_at datetime
+  created_at datetime [default: `CURRENT_TIMESTAMP`]
 }
+
+Table Services {
+  id int [pk, increment]
+  name varchar [not null]
+  description text
+  cost decimal [not null, check: "cost >= 0"]
+  is_active boolean [default: true]
+}
+
+Table Requests {
+  id int [pk, increment]
+  resident_id int [not null, ref: > Residents.id, on delete: cascade]
+  service_id int [not null, ref: > Services.id, on delete: cascade]
+  manager_id int [ref: > Managers.id, on delete: set null]
+  status request_status [default: 'pending']
+  created_at datetime [default: `CURRENT_TIMESTAMP`]
+  updated_at datetime [default: `CURRENT_TIMESTAMP`]
+}
+
+Table Payments {
+  id int [pk, increment]
+  request_id int [not null, ref: > Requests.id, on delete: cascade]
+  amount decimal [not null, check: "amount >= 0"]
+  method payment_method [not null]
+  status payment_status [default: 'pending']
+  paid_at datetime
+}
+
+Table Managers {
+  id int [pk, increment]
+  name varchar [not null]
+  email varchar [unique, not null]
+  phone varchar
+  role manager_role [not null]
+}
+
+Table Users {
+  id int [pk, increment]
+  email varchar [unique, not null]
+  password_hash varchar [not null]
+  refresh_token text
+  role varchar [not null, default: 'resident']
+  resident_id int [ref: > Residents.id, on delete: cascade]
+  manager_id int [ref: > Managers.id, on delete: cascade]
+}
+
+enum request_status {
+  pending
+  in_progress
+  completed
+  cancelled
+}
+
+enum payment_method {
+  card
+  cash
+  online
+}
+
+enum payment_status {
+  paid
+  pending
+  failed
+}
+
+enum manager_role {
+  admin
+  technician
+  support
+}
+
 
 Table Services {
   id int [pk, increment]
@@ -40,6 +111,16 @@ Table Managers {
   email varchar [unique]
   phone varchar
   role manager_role 
+}
+
+Table Users {
+  id int [pk, increment]
+  email varchar [unique, not null]
+  password_hash varchar [not null]
+  refresh_token text
+  role varchar [not null, default: 'resident']
+  resident_id int [ref: > Residents.id, on delete: cascade]
+  manager_id int [ref: > Managers.id, on delete: cascade]
 }
 
 enum request_status {
