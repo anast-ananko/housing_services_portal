@@ -4,14 +4,12 @@ import path from 'path';
 
 export async function initDatabase() {
   try {
-    await client.connect();
-
     const dropTablesSQL = await readFile(path.join(__dirname, 'drop_tables.sql'), 'utf-8');
     await client.query(dropTablesSQL);
 
     const typesSQL = await readFile(path.join(__dirname, 'types.sql'), 'utf-8');
     await client.query(typesSQL);
-   
+
     const tablesSQL = await readFile(path.join(__dirname, 'tables.sql'), 'utf-8');
     await client.query(tablesSQL);
 
@@ -21,7 +19,5 @@ export async function initDatabase() {
     console.log('Database initialized successfully');
   } catch (err) {
     console.error('Error initializing database:', err);
-  } finally {
-    await client.end();
   }
 }

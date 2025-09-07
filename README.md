@@ -3,7 +3,7 @@
 ## Table of Contents
 
 1. [Overview](#1-overview)
-2. Setup & Installation
+2. [Setup & Installation](#2-setup--installation)
 3. [Authentication](#3-authentication)
    - [Register](#register)
    - [Login](#login)
@@ -31,6 +31,63 @@ The **Housing Services Portal** is an online platform designed to facilitate hou
 - Inform users whether the service is covered under their housing fee or incurs an additional cost.
 - Provide clear cost breakdowns when applicable.
 - Offer administrators tools to manage services, pricing, and housing package inclusions.
+
+---
+
+## 2. Setup & Installation
+
+### 🔧 Requirements
+
+- Node.js v18+
+- PostgreSQL 14+
+
+### ⚙️ Environment Variables
+
+Create a `.env` file in the root of your project with the following variables:
+
+```env
+PORT=3000
+SECRET_KEY=your_access_secret
+REFRESH_SECRET_KEY=your_refresh_secret
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=housing_portal
+DB_USER=postgres
+DB_PASSWORD=your_password
+```
+
+### 🗄️ Database Setup
+
+1. Start PostgreSQL (locally or via Docker).
+
+2. **Manually create the database** with the name specified in `DB_NAME` (default: `housing_portal`):
+
+   ```sql
+   CREATE DATABASE housing_portal;
+   ```
+
+3. Make sure the user and password match the values in `.env` (`DB_USER` and `DB_PASSWORD`).
+
+### 📦 Installation & Run
+
+**Install dependencies:**
+
+```bash
+npm install
+```
+
+**Run the development server:**
+
+```bash
+npm run dev
+```
+
+**For production:**
+
+```bash
+npm run build && npm start
+```
 
 ---
 

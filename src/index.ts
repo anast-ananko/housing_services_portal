@@ -26,13 +26,13 @@ app.get('/protected', authMiddleware, (req: AuthRequest, res) => {
 
 (async () => {
   try {
-    await initDatabase(); 
+    await initDatabase();
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);
     });
   } catch (err) {
     console.error('Failed to initialize database:', err);
-    process.exit(1); 
+    process.exit(1);
   }
 })();

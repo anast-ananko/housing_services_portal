@@ -11,4 +11,13 @@ const client = new Client({
   password: process.env.DB_PASSWORD,
 });
 
+(async () => {
+  try {
+    await client.connect();
+    console.log(`Connected to database ${process.env.DB_NAME}`);
+  } catch (err) {
+    console.error('Failed to connect to database', err);
+  }
+})();
+
 export default client;

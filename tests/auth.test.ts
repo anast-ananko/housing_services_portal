@@ -9,10 +9,10 @@ describe('Auth API', () => {
   let refreshToken: string;
 
   it('should register a new user', async () => {
-    const res = await axios.post(`${baseUrl}/auth/register`, { email, password });
+    const res = await axios.post(`${baseUrl}/auth/register`, { email, password, role: 'resident' });
 
     expect(res.status).toBe(201);
-    expect(res.data).toHaveProperty('message', 'User registered');
+    expect(res.data).toHaveProperty('message', 'User registered successfully');
   });
 
   it('should login and return a token', async () => {
