@@ -52,7 +52,7 @@ REFRESH_SECRET_KEY=your_refresh_secret
 
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=housing_portal
+DB_NAME=housing_services
 DB_USER=postgres
 DB_PASSWORD=your_password
 ```
@@ -61,10 +61,10 @@ DB_PASSWORD=your_password
 
 1. Start PostgreSQL (locally or via Docker).
 
-2. **Manually create the database** with the name specified in `DB_NAME` (default: `housing_portal`):
+2. **Manually create the database** with the name specified in `DB_NAME` (default: `housing_services`):
 
    ```sql
-   CREATE DATABASE housing_portal;
+   CREATE DATABASE hhousing_services;
    ```
 
 3. Make sure the user and password match the values in `.env` (`DB_USER` and `DB_PASSWORD`).
@@ -104,7 +104,10 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 ```json
 {
   "email": "user@example.com",
-  "password": "securePassword123"
+  "password": "securePassword123",
+  "role": "resident",
+  "residentId": 1,
+  "managerId": null
 }
 ```
 
@@ -114,7 +117,14 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 ```json
 {
-  "message": "User registered"
+  "message": "User registered successfully",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "role": "resident",
+    "residentId": 1,
+    "managerId": null
+  }
 }
 ```
 
@@ -286,5 +296,14 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 - **Requests → Payments:** One-to-Many  
   _Each request can have multiple associated payments, and each payment belongs to a single request._
+  
+- **Users → Residents:** One-to-One (optional)  
+  _A user with the role "resident" may be linked to a resident record via `resident_id`._
+
+- **Users → Managers:** One-to-One (optional)  
+  _A user with the role "manager" may be linked to a manager record via `manager_id`._
+
+- **Users Role Logic:**  
+  _Each user can have a role of `resident`, `manager`, or `admin`. Depending on the role, the `resident_id` or `manager_id` field is populated to link the user to the corresponding entity._
 
 ---
