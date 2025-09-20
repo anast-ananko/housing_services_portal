@@ -1,13 +1,10 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import { authMiddleware } from './middleware/authMiddleware';
 import { AuthRequest } from './types/express';
 import { initDatabase } from './db/setup';
+import { PORT } from './config';
 
-dotenv.config();
-
-const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
@@ -28,8 +25,8 @@ app.get('/protected', authMiddleware, (req: AuthRequest, res) => {
   try {
     await initDatabase();
 
-    app.listen(port, () => {
-      console.log(`Server running on http://localhost:${port}`);
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
     });
   } catch (err) {
     console.error('Failed to initialize database:', err);

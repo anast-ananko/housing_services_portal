@@ -1,15 +1,7 @@
 import { Client } from 'pg';
-import dotenv from 'dotenv';
+import { DB_CONFIG } from '../config';
 
-dotenv.config();
-
-const client = new Client({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-});
+const client = new Client(DB_CONFIG);
 
 (async () => {
   try {

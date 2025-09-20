@@ -3,9 +3,7 @@ import { UserService } from '../services/UserService';
 import { signHS256, verifyHS256 } from '../lib/jwt';
 import { verifyPassword } from '../lib/password';
 import { User } from '../entities/User';
-
-const SECRET_KEY = process.env.SECRET_KEY!;
-const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY!;
+import { REFRESH_SECRET_KEY, SECRET_KEY } from '../config';
 
 export class UserController {
   static async register(req: Request, res: Response) {
