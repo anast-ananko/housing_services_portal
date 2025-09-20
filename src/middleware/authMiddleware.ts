@@ -7,7 +7,7 @@ import { SECRET_KEY } from '../config';
 export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   const token = authHeader.split(' ')[1];
@@ -17,6 +17,6 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     req.user = payload;
     next();
   } catch (err) {
-    return res.status(401).json({ error: 'Invalid or expired token' });
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 }

@@ -22,6 +22,10 @@ export class UserService {
     return result.rows[0];
   }
 
+  static async deactivateUser(email: string): Promise<void> {
+    await client.query(`UPDATE Users SET is_active = false WHERE email = $1`, [email]);
+  }
+
   static async getUserByEmail(email: string): Promise<User | null> {
     const result = await client.query(
       `SELECT id, email, role, password_hash, refresh_token, resident_id, manager_id
@@ -30,6 +34,14 @@ export class UserService {
       [email]
     );
     return result.rows[0] || null;
+  }
+
+  static async updatePassword(email: string, newPassword: string): Promise<void> {
+    const passwordHash = hashPassword(newPassword);
+    await client.query(`UPDATE Users SET password_hash = $1 WHERE email = $2`, [
+      passwordHash,
+      email,
+    ]);
   }
 
   static async saveRefreshToken(email: string, token: string): Promise<void> {
@@ -49,5 +61,9 @@ export class UserService {
       [token]
     );
     return result.rows[0] || null;
+  }
+
+  static async clearRefreshToken(email: string): Promise<void> {
+    await client.query(`UPDATE Users SET refresh_token = NULL WHERE email = $1`, [email]);
   }
 }

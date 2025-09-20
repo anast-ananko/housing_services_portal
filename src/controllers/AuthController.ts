@@ -5,7 +5,7 @@ import { verifyPassword } from '../lib/password';
 import { User } from '../entities/User';
 import { REFRESH_SECRET_KEY, SECRET_KEY } from '../config';
 
-export class UserController {
+export class AuthController {
   static async register(req: Request, res: Response) {
     const { email, password, role, residentId, managerId } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
