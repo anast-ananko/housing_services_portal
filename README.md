@@ -7,17 +7,10 @@
 3. [Authentication](#3-authentication)
    - [Register](#register)
    - [Login](#login)
-4. System Summary
-5. [Data Modeling](#5-data-modeling)
+4. [Data Modeling](#5-data-modeling)
    - [Entity Relationship Diagram](#entity-relationship-diagram)
    - [Detailed Table Information](#detailed-table-information)
    - [Relationships Explained](#relationships-explained)
-6. API Endpoints
-   - Residents Overview (`/api/residents`)
-   - Services Overview (`/api/services`)
-   - Requests Overview (`/api/requests`)
-   - Housing Plans Overview (`/api/housing-plans`)
-7. Cost Calculation Logic
 
 ---
 
@@ -29,7 +22,6 @@ The **Housing Services Portal** is an online platform designed to facilitate hou
 
 - Allow residents to browse and request housing-related services (e.g., plumbing, maintenance, pest control).
 - Inform users whether the service is covered under their housing fee or incurs an additional cost.
-- Provide clear cost breakdowns when applicable.
 - Offer administrators tools to manage services, pricing, and housing package inclusions.
 
 ---
@@ -39,37 +31,44 @@ The **Housing Services Portal** is an online platform designed to facilitate hou
 ### 🔧 Requirements
 
 - Node.js v18+
-- PostgreSQL 14+
+- Docker & Docker Compose (if running with containers)
+- PostgreSQL 14+ (if running locally, without Docker)
 
 ### ⚙️ Environment Variables
 
-Create a `.env` file in the root of your project with the following variables:
+Environment variables are stored in .env files.
 
-```env
-PORT=3000
-SECRET_KEY=your_access_secret
-REFRESH_SECRET_KEY=your_refresh_secret
+This project provides example files — copy them and rename:
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=housing_services
-DB_USER=postgres
-DB_PASSWORD=your_password
+```bash
+rename .env.example .env
+rename .env.docker.example .env.docker
 ```
+
+- Use .env when running the server locally.
+- Use .env.docker when running the server inside Docker (it will be automatically picked up by docker-compose).
 
 ### 🗄️ Database Setup
 
-1. Start PostgreSQL (locally or via Docker).
+### Local database
+
+1. Start PostgreSQL locally.
 
 2. **Manually create the database** with the name specified in `DB_NAME` (default: `housing_services`):
 
    ```sql
-   CREATE DATABASE hhousing_services;
+   CREATE DATABASE housing_services;
    ```
 
 3. Make sure the user and password match the values in `.env` (`DB_USER` and `DB_PASSWORD`).
 
+### Dockerized database
+
+Make sure **Docker** (and Docker Compose) is installed and **running**.The database container will be initialized automatically using values from `.env.docker` when you run the services with Docker Compose.
+
 ### 📦 Installation & Run
+
+### Local development (no Docker)
 
 **Install dependencies:**
 
@@ -87,6 +86,26 @@ npm run dev
 
 ```bash
 npm run build && npm start
+```
+
+### With Docker Compose (server + database)
+
+**Start all services:**
+
+```bash
+docker-compose up
+```
+
+**Stop the containers (press Ctrl+C or run):**
+
+```bash
+docker-compose down
+```
+
+**If you change dependencies or Dockerfile, rebuild images with:**
+
+```bash
+docker-compose up --build
 ```
 
 ---
@@ -296,7 +315,6 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 - **Requests → Payments:** One-to-Many  
   _Each request can have multiple associated payments, and each payment belongs to a single request._
-  
 - **Users → Residents:** One-to-One (optional)  
   _A user with the role "resident" may be linked to a resident record via `resident_id`._
 
