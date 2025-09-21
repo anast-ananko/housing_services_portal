@@ -1,0 +1,38 @@
+services:
+  server:
+    container_name: server
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    command: npm run dev
+    env_file: .env.docker
+    networks:
+      - server-network
+    restart: always
+    volumes:
+      - ./src:/app/src
+      - logs:/app/logs
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17
+    container_name: postgres
+    ports:
+      - ${DB_PORT_CONTAINER}:${DB_PORT}
+    env_file: .env.docker
+    environment:
+      - DB_HOST=db
+    networks:
+      - server-network
+    restart: always
+    volumes:
+      - pglogs:/var/log/postgresql
+
+networks:
+  server-network:
+    driver: bridge
+
+volumes:
+  pglogs:
+  logs:
