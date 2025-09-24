@@ -1,5 +1,5 @@
 import express from 'express';
-import authRoutes from './routes/auth';
+import authRoutes from './routes/authRoutes';
 import { authMiddleware } from './middleware/authMiddleware';
 import { AuthRequest } from './types/express';
 import { initDatabase } from './db/setup';

@@ -1,9 +1,9 @@
-export interface User {
+export interface UserEntity {
   id: number;
   email: string;
-  role: 'resident' | 'manager' | 'admin';
   password_hash: string;
   refresh_token?: string | null;
+  role: 'resident' | 'manager' | 'admin';
   resident_id?: number | null;
   manager_id?: number | null;
 }

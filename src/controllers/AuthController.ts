@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/UserService';
 import { signHS256, verifyHS256 } from '../lib/jwt';
-import { verifyPassword } from '../lib/password';
-import { User } from '../entities/User';
 import { REFRESH_SECRET_KEY, SECRET_KEY } from '../config';
+import { AuthService } from '../services/AuthService';
+import { User } from '../types/user';
 
 export class AuthController {
   static async register(req: Request, res: Response) {
@@ -37,8 +37,9 @@ export class AuthController {
     if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
     try {
-      const user = await UserService.getUserByEmail(email);
-      if (!user || !verifyPassword(password, user.password_hash)) {
+      const user = await AuthService.verifyUser(email, password);
+
+      if (!user) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
@@ -47,7 +48,7 @@ export class AuthController {
         expiresInSeconds: 7 * 24 * 3600,
       });
 
-      await UserService.saveRefreshToken(user.email, refreshToken);
+      await AuthService.saveRefreshToken(user.email, refreshToken);
 
       res.status(200).json({ accessToken, refreshToken });
     } catch (err) {
