@@ -3,12 +3,12 @@ import { UserService } from '../services/UserService';
 import { AuthRequest } from 'types/express';
 
 export class UserController {
-static async getProfile(req: AuthRequest, res: Response, next: NextFunction) {
+  static async getProfile(req: AuthRequest, res: Response) {
     try {
-      if (!req.user) return res.status(401).json({ error: "Unauthorized" });
+      if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
 
       const user = await UserService.getUserById(req.user.id);
-      if (!user) return res.status(404).json({ error: "User not found" });
+      if (!user) return res.status(404).json({ error: 'User not found' });
 
       return res.json(user);
     } catch (err) {
@@ -38,6 +38,7 @@ static async getProfile(req: AuthRequest, res: Response, next: NextFunction) {
   static async update(req: Request, res: Response) {
     try {
       const user = await UserService.updateUser(Number(req.params.id), req.body);
+      if (!user) return res.status(404).json({ error: 'User not found' });
       res.json(user);
     } catch {
       res.status(500).json({ error: 'Failed to update user' });

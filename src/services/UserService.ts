@@ -68,7 +68,7 @@ export class UserService {
     const passwordHash = hashPassword(newPassword);
     await client.query(
       `UPDATE Users 
-      ET password_hash = $1 
+      SET password_hash = $1 
       WHERE email = $2`,
       [passwordHash, email]
     );

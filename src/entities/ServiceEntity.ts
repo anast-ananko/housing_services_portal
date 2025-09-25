@@ -3,5 +3,5 @@ export interface ServiceEntity {
   name: string;
   description?: string | null;
   cost: number;
-  isActive: boolean;
+  is_active: boolean;
 }

@@ -1,9 +1,9 @@
 import client from '../db/db';
 import { verifyPassword } from '../lib/password';
-import { User } from '../entities/UserEntity';
+import { UserEntity } from '../entities/UserEntity';
 
 export class AuthService {
-  static async verifyUser(email: string, password: string): Promise<User | null> {
+  static async verifyUser(email: string, password: string): Promise<UserEntity | null> {
     const result = await client.query(
       `SELECT * 
       FROM Users 
@@ -25,7 +25,7 @@ export class AuthService {
     );
   }
 
-  static async getUserByRefreshToken(token: string): Promise<User | null> {
+  static async getUserByRefreshToken(token: string): Promise<UserEntity | null> {
     const result = await client.query(
       `SELECT id, email, role, password_hash, refresh_token, resident_id, manager_id
        FROM Users

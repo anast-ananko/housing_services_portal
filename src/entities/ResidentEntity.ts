@@ -4,5 +4,5 @@ export interface ResidentEntity {
   email: string;
   phone?: string | null;
   address?: string | null;
-  createdAt: Date;
+  created_at: Date;
 }
