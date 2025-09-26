@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { verifyHS256 } from '../lib/jwt';
 import { AuthRequest } from '../types/express';
 import { SECRET_KEY } from '../config';
-import { User } from 'types/user';
+import { User } from 'types/types';
 
 export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;

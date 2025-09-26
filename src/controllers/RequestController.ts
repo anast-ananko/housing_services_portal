@@ -42,7 +42,11 @@ export class RequestController {
 
   static async delete(req: Request, res: Response) {
     try {
-      await RequestService.delete(Number(req.params.id));
+      const deleted = await RequestService.delete(Number(req.params.id));
+      if (!deleted) {
+        return res.status(404).json({ error: 'Request not found' });
+      }
+
       res.status(204).send();
     } catch {
       res.status(500).json({ error: 'Failed to delete request' });

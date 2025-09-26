@@ -40,16 +40,16 @@ export function verifyHS256<T = Record<string, unknown>>(token: string, secret: 
 
   const [h, p, s] = parts;
 
+  const header = JSON.parse(base64url.decode(h).toString());
+  if (header.alg !== 'HS256' || header.typ !== 'JWT') {
+    throw new Error('Unsupported JWT header');
+  }
+
   const expected = crypto.createHmac('sha256', secret).update(`${h}.${p}`).digest();
   const sigBuf = base64url.decode(s);
 
   if (expected.length !== sigBuf.length || !crypto.timingSafeEqual(expected, sigBuf)) {
     throw new Error('Invalid signature');
-  }
-
-  const header = JSON.parse(base64url.decode(h).toString());
-  if (header.alg !== 'HS256' || header.typ !== 'JWT') {
-    throw new Error('Unsupported JWT header');
   }
 
   const payload = JSON.parse(base64url.decode(p).toString());

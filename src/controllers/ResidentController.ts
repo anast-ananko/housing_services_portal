@@ -42,7 +42,11 @@ export class ResidentController {
 
   static async delete(req: Request, res: Response) {
     try {
-      await ResidentService.delete(Number(req.params.id));
+      const deleted = await ResidentService.delete(Number(req.params.id));
+      if (!deleted) {
+        return res.status(404).json({ error: 'Resident not found' });
+      }
+
       res.status(204).send();
     } catch {
       res.status(500).json({ error: 'Failed to delete resident' });

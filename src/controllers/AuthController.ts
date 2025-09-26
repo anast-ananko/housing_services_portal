@@ -3,7 +3,7 @@ import { UserService } from '../services/UserService';
 import { signHS256, verifyHS256 } from '../lib/jwt';
 import { REFRESH_SECRET_KEY, SECRET_KEY } from '../config';
 import { AuthService } from '../services/AuthService';
-import { User } from '../types/user';
+import { User } from '../types/types';
 
 export class AuthController {
   static async register(req: Request, res: Response) {

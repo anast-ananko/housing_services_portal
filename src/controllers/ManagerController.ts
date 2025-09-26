@@ -42,7 +42,11 @@ export class ManagerController {
 
   static async delete(req: Request, res: Response) {
     try {
-      await ManagerService.delete(Number(req.params.id));
+      const deleted = await ManagerService.delete(Number(req.params.id));
+      if (!deleted) {
+        return res.status(404).json({ error: 'Manager not found' });
+      }
+
       res.status(204).send();
     } catch {
       res.status(500).json({ error: 'Failed to delete manager' });
