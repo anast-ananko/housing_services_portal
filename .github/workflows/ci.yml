@@ -43,5 +43,5 @@ jobs:
           name: coverage-report
           path: coverage
 
-        name: Display coverage summary
+      - name: Display coverage summary
         run: npx jest --coverage --coverageReporters=text-summary
