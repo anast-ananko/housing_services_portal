@@ -11,6 +11,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      REFRESH_SECRET_KEY: ${{ secrets.REFRESH_SECRET_KEY }}
+      PORT: ${{ secrets.PORT }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_PORT_CONTAINER: ${{ secrets.DB_PORT_CONTAINER }}
 
     steps:
       - name: Checkout repository
@@ -23,22 +36,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Set environment variables
-        run: echo "Environment variables loaded"
-        env:
-          PORT: ${{ secrets.PORT }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          REFRESH_SECRET_KEY: ${{ secrets.REFRESH_SECRET_KEY }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_PORT_CONTAINER: ${{ secrets.DB_PORT_CONTAINER }}
 
       - name: Run linter
         run: npm run lint

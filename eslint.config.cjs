@@ -33,5 +33,6 @@ module.exports = defineConfig([
       '@typescript-eslint/no-var-requires': 'off',
       'comma-dangle': ['error', 'only-multiline'],
     },
+    ignores: ['dist/', 'node_modules/'],
   },
 ]);
