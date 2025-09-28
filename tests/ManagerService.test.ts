@@ -7,21 +7,26 @@ const managerExample: Omit<ManagerEntity, 'id'> = {
   email: 'john@example.com',
   role: 'admin',
 };
+
 const updatedManagerExample: Omit<ManagerEntity, 'id'> = {
+  ...managerExample,
   name: 'Updated',
-  email: 'john@example.com',
-  role: 'admin',
 };
 
 const mockQuery = jest.fn();
 
 describe('ManagerService', () => {
   beforeAll(() => {
-    (client as any).query = mockQuery;
+    const mockClient = client as Partial<typeof client>;
+    mockClient.query = mockQuery;
   });
 
   beforeEach(() => {
     mockQuery.mockReset();
+  });
+
+  afterAll(async () => {
+    await client.end();
   });
 
   it('should create manager', async () => {
@@ -98,9 +103,5 @@ describe('ManagerService', () => {
     const result = await ManagerService.delete(999);
 
     expect(result).toBe(false);
-  });
-
-  afterAll(async () => {
-    await client.end();
   });
 });

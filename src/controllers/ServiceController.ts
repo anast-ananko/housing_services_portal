@@ -42,7 +42,11 @@ export class ServiceController {
 
   static async delete(req: Request, res: Response) {
     try {
-      await ServiceService.delete(Number(req.params.id));
+      const deleted = await ServiceService.delete(Number(req.params.id));
+      if (!deleted) {
+        return res.status(404).json({ error: 'Service not found' });
+      }
+
       res.status(204).send();
     } catch {
       res.status(500).json({ error: 'Failed to delete service' });

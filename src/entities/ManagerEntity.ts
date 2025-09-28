@@ -1,4 +1,4 @@
-import { ManagerRole } from "types/types";
+import { ManagerRole } from 'types/types';
 
 export interface ManagerEntity {
   id: number;

@@ -8,10 +8,9 @@ const paymentExample: Omit<PaymentEntity, 'id'> = {
   method: 'card',
   status: 'pending',
 };
+
 const updatedPaymentExample: Omit<PaymentEntity, 'id'> = {
-  request_id: 1,
-  amount: 10,
-  method: 'card',
+  ...paymentExample,
   status: 'paid',
 };
 
@@ -19,11 +18,16 @@ const mockQuery = jest.fn();
 
 describe('PaymentService', () => {
   beforeAll(() => {
-    (client as any).query = mockQuery;
+    const mockClient = client as Partial<typeof client>;
+    mockClient.query = mockQuery;
   });
 
   beforeEach(() => {
     mockQuery.mockReset();
+  });
+
+  afterAll(async () => {
+    await client.end();
   });
 
   it('should create payment', async () => {
@@ -100,9 +104,5 @@ describe('PaymentService', () => {
     const result = await PaymentService.delete(999);
 
     expect(result).toBe(false);
-  });
-
-  afterAll(async () => {
-    await client.end();
   });
 });

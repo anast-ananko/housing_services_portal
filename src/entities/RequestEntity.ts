@@ -1,4 +1,4 @@
-import { RequestStatus } from "types/types";
+import { RequestStatus } from 'types/types';
 
 export interface RequestEntity {
   id: number;

@@ -1,4 +1,4 @@
-import { PaymentMethod, PaymentStatus } from "types/types";
+import { PaymentMethod, PaymentStatus } from 'types/types';
 
 export interface PaymentEntity {
   id: number;

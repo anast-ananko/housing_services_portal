@@ -9,23 +9,26 @@ const requestExample: Omit<RequestEntity, 'id'> = {
   created_at: new Date('2023-01-01T10:00:00Z'),
   updated_at: new Date('2023-01-01T10:00:00Z'),
 };
+
 const updatedRequestExample: Omit<RequestEntity, 'id'> = {
-  resident_id: 1,
-  service_id: 1,
+  ...requestExample,
   status: 'approved',
-  created_at: new Date('2023-01-01T10:00:00Z'),
-  updated_at: new Date('2023-01-01T10:00:00Z'),
 };
 
 const mockQuery = jest.fn();
 
 describe('RequestService', () => {
   beforeAll(() => {
-    (client as any).query = mockQuery;
+    const mockClient = client as Partial<typeof client>;
+    mockClient.query = mockQuery;
   });
 
   beforeEach(() => {
     mockQuery.mockReset();
+  });
+
+  afterAll(async () => {
+    await client.end();
   });
 
   it('should create request', async () => {
@@ -116,9 +119,5 @@ describe('RequestService', () => {
     const result = await RequestService.delete(999);
 
     expect(result).toBe(false);
-  });
-
-  afterAll(async () => {
-    await client.end();
   });
 });

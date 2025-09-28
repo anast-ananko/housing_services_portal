@@ -47,7 +47,14 @@ export class UserController {
 
   static async delete(req: Request, res: Response) {
     try {
-      await UserService.deleteUser(Number(req.params.id));
+      const deleted = await UserService.delete(Number(req.params.id));
+      if (!deleted) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      res.status(204).send();
+
+      await UserService.delete(Number(req.params.id));
       res.status(204).send();
     } catch {
       res.status(500).json({ error: 'Failed to delete user' });

@@ -7,21 +7,26 @@ const residentExample: Omit<ResidentEntity, 'id'> = {
   email: 'john@example.com',
   created_at: new Date('2023-01-01T10:00:00Z'),
 };
+
 const updatedResidentExample: Omit<ResidentEntity, 'id'> = {
+  ...residentExample,
   name: 'Updated',
-  email: 'john@example.com',
-  created_at: new Date('2023-01-01T10:00:00Z'),
 };
 
 const mockQuery = jest.fn();
 
 describe('ResidentService', () => {
   beforeAll(() => {
-    (client as any).query = mockQuery;
+    const mockClient = client as Partial<typeof client>;
+    mockClient.query = mockQuery;
   });
 
   beforeEach(() => {
     mockQuery.mockReset();
+  });
+
+  afterAll(async () => {
+    await client.end();
   });
 
   it('should create resident', async () => {
@@ -92,15 +97,11 @@ describe('ResidentService', () => {
     expect(mockQuery).toHaveBeenCalledWith(expect.stringContaining('DELETE FROM Residents'), [1]);
   });
 
-  it('should return false if resident not found on delete', async () => {
+  it('should return false if residents not found on delete', async () => {
     mockQuery.mockResolvedValueOnce({ rowCount: 0 });
 
     const result = await ResidentService.delete(999);
 
     expect(result).toBe(false);
-  });
-
-  afterAll(async () => {
-    await client.end();
   });
 });

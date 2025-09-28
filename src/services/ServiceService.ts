@@ -43,11 +43,12 @@ export class ServiceService {
     return result.rows[0] || null;
   }
 
-  static async delete(id: number): Promise<void> {
-    await client.query(
+  static async delete(id: number): Promise<boolean> {
+    const result = await client.query(
       `DELETE FROM Services 
        WHERE id = $1`,
       [id]
     );
+    return (result.rowCount ?? 0) > 0;
   }
 }
