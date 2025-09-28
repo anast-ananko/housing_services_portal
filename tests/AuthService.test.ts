@@ -17,6 +17,12 @@ jest.mock('../src/lib/password', () => ({
   verifyPassword: jest.fn(),
 }));
 
+jest.mock('../src/db/db', () => ({
+  connect: jest.fn(),
+  query: jest.fn(),
+  end: jest.fn(),
+}));
+
 const mockQuery = jest.fn();
 
 describe('AuthService', () => {

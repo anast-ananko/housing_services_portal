@@ -15,6 +15,12 @@ const updatedRequestExample: Omit<RequestEntity, 'id'> = {
   status: 'approved',
 };
 
+jest.mock('../src/db/db', () => ({
+  connect: jest.fn(),
+  query: jest.fn(),
+  end: jest.fn(),
+}));
+
 const mockQuery = jest.fn();
 
 describe('RequestService', () => {
