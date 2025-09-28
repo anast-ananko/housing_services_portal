@@ -6,7 +6,8 @@
   "keywords": [],
   "author": "Nastassia Ananka",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run copy-sql",
+    "copy-sql": "cpx \"src/db/*.sql\" dist/src/db",
     "start": "node dist/src/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .ts",
@@ -31,6 +32,7 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
+    "cpx": "^1.5.0",
     "eslint": "^9.33.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
