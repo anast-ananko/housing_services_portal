@@ -4,10 +4,18 @@
 
 1. [Overview](#1-overview)
 2. [Setup & Installation](#2-setup--installation)
-3. [Authentication](#3-authentication)
+3. [Running Tests](#3-running-tests)
+4. [Authentication](#4-authentication)
    - [Register](#register)
    - [Login](#login)
-4. [Data Modeling](#5-data-modeling)
+5. [API Endpoints](#5-api-endpoints)
+   - [Users](#users)
+   - [Residents](#residents)
+   - [Managers](#managers)
+   - [Services](#services)
+   - [Requests](#requests)
+   - [Payments](#payments)
+6. [Data Modeling](#6-data-modeling)
    - [Entity Relationship Diagram](#entity-relationship-diagram)
    - [Detailed Table Information](#detailed-table-information)
    - [Relationships Explained](#relationships-explained)
@@ -110,13 +118,33 @@ docker-compose up --build
 
 ---
 
-## 3. Authentication
+## 3. Running Tests
+
+This project uses **Jest** for unit and integration testing.
+
+### 🧪 Run all tests
+
+```bash
+npm run test
+```
+
+### 📊 Run tests with coverage
+
+To check which parts of the codebase are covered by tests, run:
+
+```bash
+npm run test:coverage
+```
+
+---
+
+## 4. Authentication
 
 The portal uses a **JWT-based authentication system**. Users can register with an email and password, then login to receive a token for accessing protected endpoints.
 
 ### Register
 
-**Endpoint:** `POST /api/auth/register`
+**Endpoint:** `POST /auth/register`
 
 **Request Body:**
 
@@ -151,7 +179,7 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 ### Login
 
-**Endpoint:** `POST /api/auth/login`
+**Endpoint:** `POST /auth/login`
 
 **Request Body:**
 
@@ -177,7 +205,7 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 ### Refresh Access Token
 
-**Endpoint:** `POST /api/auth/refresh`
+**Endpoint:** `POST /auth/refresh`
 
 **Request Body:**
 
@@ -201,7 +229,86 @@ The portal uses a **JWT-based authentication system**. Users can register with a
 
 ---
 
-## 5. Data Modeling
+## 5. API Endpoints
+
+All the following endpoints (except `/auth`) require a valid **JWT access token** in the  
+`Authorization: Bearer <token>` header.
+
+---
+
+### Users
+
+**Endpoint:** `/users`
+
+- `GET /users` — Get all users
+- `GET /users/:id` — Get a user by ID
+- `GET /users/me` — Get the currently authenticated user profile
+- `PUT /users/:id` — Update a user
+- `DELETE /users/:id` — Delete a user
+
+---
+
+### Residents
+
+**Endpoint:** `/residents`
+
+- `GET /residents` — Get all residents
+- `GET /residents/:id` — Get a resident by ID
+- `POST /residents` — Create a new resident
+- `PUT /residents/:id` — Update a resident
+- `DELETE /residents/:id` — Delete a resident
+
+---
+
+### Managers
+
+**Endpoint:** `/managers`
+
+- `GET /managers` — Get all managers
+- `GET /managers/:id` — Get a manager by ID
+- `POST /managers` — Create a new manager
+- `PUT /managers/:id` — Update a manager
+- `DELETE /managers/:id` — Delete a manager
+
+---
+
+### Services
+
+**Endpoint:** `/services`
+
+- `GET /services` — Get all services
+- `GET /services/:id` — Get a service by ID
+- `POST /services` — Create a new service
+- `PUT /services/:id` — Update a service
+- `DELETE /services/:id` — Delete a service
+
+---
+
+### Requests
+
+**Endpoint:** `/requests`
+
+- `GET /requests` — Get all requests
+- `GET /requests/:id` — Get a request by ID
+- `POST /requests` — Create a new request
+- `PUT /requests/:id` — Update a request
+- `DELETE /requests/:id` — Delete a request
+
+---
+
+### Payments
+
+**Endpoint:** `/payments`
+
+- `GET /payments` — Get all payments
+- `GET /payments/:id` — Get a payment by ID
+- `POST /payments` — Create a new payment
+- `PUT /payments/:id` — Update a payment
+- `DELETE /payments/:id` — Delete a payment
+
+---
+
+## 6. Data Modeling
 
 ### Entity Relationship Diagram
 
